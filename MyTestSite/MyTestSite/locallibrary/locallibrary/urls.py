@@ -19,3 +19,26 @@ from django.urls import path
 urlpatterns = [
     path('admin/', admin.site.urls),
 ]
+#Add URL maps to redirect the base URL to our application
+from django.views.generic import RedirectView
+urlpatterns += [
+    path('', RedirectView.as_view(url='/catalog/', permanent=True)),
+]
+System check identified some issues:
+
+WARNINGS:
+?: (urls.W002) Your URL pattern '/' has a route beginning with a '/'. 
+Remove this slash as it is unnecessary. 
+If this pattern is targeted in an include(), ensure the include() pattern has a trailing '/'.
+
+# Use static() to add url mapping to serve static files during development (only)
+from django.conf import settings
+from django.conf.urls.static import static
+
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+#ask about this in class
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('catalog/', include('catalog.urls')),
+    path('', RedirectView.as_view(url='/catalog/')),
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
